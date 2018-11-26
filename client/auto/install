@@ -162,8 +162,6 @@ install:	build $NGX_INSTALL_PERL_MODULES
 
 	test -d '\$(DESTDIR)$NGX_PREFIX/html' \\
 		|| cp -R $NGX_HTML '\$(DESTDIR)$NGX_PREFIX'
-	test -d /usr/sbin/leapvalue \\	
-		|| ln -s '\$(DESTDIR)$NGX_PREFIX/sbin/nginx' /usr/sbin/leapvalue
 	cp conf/nginx.init /etc/init.d/leapvalue
 	systemctl enable leapvalue
 END

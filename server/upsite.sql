@@ -251,6 +251,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 START TRANSACTION;
 USE `upsite`;
 INSERT INTO `upsite`.`admin` (`id`, `name`, `nickName`, `pwd`, `token`, `time`) VALUES (1, 'admin', '超级管理员', 'e4250fbbca794ef4dc240dd53e3e8fd3', '', '2018-07-21 14:59:49');
+INSERT INTO `upsite`.`addr` (`name`) VALUES ( '本地');
 
 COMMIT;
 
