@@ -1,0 +1,52 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Required-Start:    
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts small's daemon
+# Description:       starts small using start-stop-daemon
+### END INIT INFO
+
+DAEMON=/usr/local/$NAME/start.py
+PID=/run/$NAME.pid
+test -x $DAEMON || exit 0
+
+. /lib/lsb/init-functions
+
+start_small() {
+	start-stop-daemon --start --exec $DAEMON &
+}
+
+stop_small() {
+	start-stop-daemon --stop --pidfile $PID
+}
+
+case "$1" in
+	start)
+		log_daemon_msg "Starting " "$NAME"
+		start_small
+		log_end_msg 0
+		;;
+	stop)
+		log_daemon_msg "Stopping " "$NAME"
+		stop_small
+		log_end_msg 0
+		;;
+	reload)
+		log_daemon_msg "reload " "$NAME"
+		start-stop-daemon --stop --signal HUP --quiet --pidfile $PID
+		log_end_msg 0
+		;;
+	restart)
+		log_daemon_msg "Restarting " "$NAME"
+		stop_small
+		start_small
+		log_end_msg 0
+		;;
+	*)
+		echo "Usage: $NAME {start|stop|restart|reload}" >&2
+		exit 3
+		;;
+esac
