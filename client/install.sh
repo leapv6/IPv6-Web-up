@@ -8,5 +8,5 @@ if [ -x /usr/sbin/nginx ]; then
 fi
 ./configure --with-http_ssl_module --add-module=src/http/modules/ngx_http_substitutions --prefix=/usr/local/leapvalue
 make && make install
-test -d /usr/sbin/leapvalue || ln -s '/usr/local/nginx/sbin/nginx' /usr/sbin/leapvalue
+test -d /usr/sbin/leapvalue || ln -s '/usr/local/leapvalue/sbin/nginx' /usr/sbin/leapvalue
 systemctl start leapvalue
